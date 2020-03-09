@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from flask import Flask, render_template
 from werkzeug.utils import redirect
 from forms import RegisterForm
 
 from data import db_session
-from data.news import News
+from data.jobs import Jobs
 from data.users import User
 
 app = Flask(__name__)
@@ -60,12 +62,17 @@ def main():
         user.email = 'scott_chief@mars.org'
         session.add(user)
         session.commit()
+    if zadacha_2:
+        jobs = Jobs()
+        jobs.team_leader = 1
+        jobs.job = 'deployment of residential modules 1 and 2'
+        jobs.work_size = 15
+        jobs.collaborators = '2, 3'
+        jobs.start_date = datetime.now()
+        session.add(jobs)
+        session.commit()
     if zadacha_3:
-        for i in range(10):
-            news = News(title=f"новость {i}", content="Привет блог!",
-                        user_id=1, is_private=False)
-            session.add(news)
-            session.commit()
+        pass
     app.run()
 
 
