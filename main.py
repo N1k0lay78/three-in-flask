@@ -41,8 +41,8 @@ def main():
     db_session.global_init("db/blogs.sqlite")
     session = db_session.create_session()
     # флаг для задач
-    zadacha_1 = True
-    zadacha_2 = True
+    zadacha_1 = False
+    zadacha_2 = False
     zadacha_3 = False
     if zadacha_1:
         user = User()
@@ -53,6 +53,36 @@ def main():
         user.speciality = 'research engineer'
         user.address = 'module_1'
         user.email = 'scott_chief@mars.org'
+        session.add(user)
+        session.commit()
+        user = User()
+        user.surname = 'Nikniksham'
+        user.name = 'Nikniksham'
+        user.age = 21
+        user.position = 'captain'
+        user.speciality = 'engineer'
+        user.address = 'module_10'
+        user.email = 'nikniksham@mars.org'
+        session.add(user)
+        session.commit()
+        user = User()
+        user.surname = 'Builder'
+        user.name = 'Bob'
+        user.age = 21
+        user.position = 'Worker'
+        user.speciality = 'Builder'
+        user.address = 'module_1'
+        user.email = 'Bob@mars.org'
+        session.add(user)
+        session.commit()
+        user = User()
+        user.surname = 'Builder'
+        user.name = 'Bot'
+        user.age = 21
+        user.position = 'gost'
+        user.speciality = 'Builder'
+        user.address = 'module_1'
+        user.email = 'Bot@mars.org'
         session.add(user)
         session.commit()
     if zadacha_2:
