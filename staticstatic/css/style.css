@@ -1,0 +1,59 @@
+.tmp1 {
+	display: inline;
+	background-color: #f99;
+	box-shadow: -10px 0 0 #f99, 10px 0 0 #f99;
+	padding: 0px 0;
+}
+
+.tmp2 {
+    display: inline;
+	background-color: #9f9;
+	box-shadow: -10px 0 0 #9f9, 10px 0 0 #9f9;
+	padding: 0px 0;
+}
+
+.tmp3 {
+    display: inline;
+	background-color: #99f;
+	box-shadow: -10px 0 0 #99f, 10px 0 0 #99f;
+	padding: 0px 0;
+}
+
+form.login_form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+    background-color: #fa0;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.text {
+    text-align: left;
+}
+
+.intext {
+    background: #fff;
+}
+
+.button {
+    font-size: x-large;
+    background: #99d;
+    border: 500px;
+    border-radius: 5px;
+}
+
+.fon-color {
+    background: #ff0;
+}
+
+
+table {
+border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+border: 1px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+border: 3px solid grey;
+}
+
+th {border: 1px solid grey;}
+td {border: 1px solid grey;}

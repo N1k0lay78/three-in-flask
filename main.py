@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from werkzeug.utils import redirect
 from forms import RegisterForm
 
@@ -37,13 +37,27 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+@app.route('/works/')
+def works():
+    jobs = []
+    for i, job in enumerate(session.query(Jobs).all()):
+        _job = {}
+        _job['id'] = i + 1
+        _job['title'] = job.job
+        leader = session.query(User).filter(User.id == job.team_leader).first()
+        _job['team_leader'] = f'{leader.name} {leader.surname}'
+        _job['duration'] = job.work_size
+        _job['collaboration'] = job.collaborators
+        _job['is_finished'] = job.is_finished
+        jobs.append(_job)
+    print(jobs)
+    return render_template('works.html', jobs=jobs, style=url_for('static', filename='css/style.css'))
+
+
 def main():
-    db_session.global_init("db/blogs.sqlite")
-    session = db_session.create_session()
     # флаг для задач
     zadacha_1 = False
     zadacha_2 = False
-    zadacha_3 = False
     if zadacha_1:
         user = User()
         user.surname = 'Scott'
@@ -94,16 +108,11 @@ def main():
         jobs.start_date = datetime.now()
         session.add(jobs)
         session.commit()
-    if zadacha_3:
-        jobs = []
-        for job in session.query(Jobs).all():
-            _job = {}
-            _job['title'] = job.job
-            _job['duration'] = job.work_size
-            _job['collaboration'] = job.collaborators
-
     app.run()
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/blogs.sqlite")
+    session = db_session.create_session()
+    print('http://127.0.0.1:5000/works/')
     main()

@@ -3,11 +3,11 @@
 {% block content %}
 <div align="center">
     <div>
-        <h2>Works log</h2>
+        <h2>Список работ</h2>
     </div>
     {% for job in jobs %}
     <div>
-        <h2>Action #{{job.id}}</h2>
+        <h2>Работа #{{job.id}}</h2>
         <div class="text">
             <table>
                 <tr>
@@ -29,12 +29,24 @@
                 </tr>
                 <tr>
                     <td>
-                        <a></a>
+                        <a>{{job.title}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.team_leader}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.duration}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.collaboration}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.is_finished}}</a>
                     </td>
                 </tr>
 
             </table>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-{% endblock %}
+    {% endblock %}
