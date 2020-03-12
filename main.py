@@ -12,13 +12,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
-@app.route("/")
-def index():
-    session = db_session.create_session()
-    news = session.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news)
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -48,8 +41,8 @@ def main():
     db_session.global_init("db/blogs.sqlite")
     session = db_session.create_session()
     # флаг для задач
-    zadacha_1 = False
-    zadacha_2 = False
+    zadacha_1 = True
+    zadacha_2 = True
     zadacha_3 = False
     if zadacha_1:
         user = User()
@@ -72,7 +65,13 @@ def main():
         session.add(jobs)
         session.commit()
     if zadacha_3:
-        pass
+        jobs = []
+        for job in session.query(Jobs).all():
+            _job = {}
+            _job['title'] = job.job
+            _job['duration'] = job.work_size
+            _job['collaboration'] = job.collaborators
+
     app.run()
 
 
