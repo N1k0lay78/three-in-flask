@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, url_for
 from werkzeug.utils import redirect
-from forms import RegisterForm
+from data.registerform import RegisterForm
 
 from data import db_session
 from data.jobs import Jobs
@@ -12,10 +12,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
+        print(123)
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
@@ -28,12 +29,15 @@ def reqister():
         user = User(
             name=form.name.data,
             email=form.email.data,
-            about=form.about.data
+            surname=form.surname.data,
+            age=form.age.data,
+            position=form.position.data,
+            speciality=form.speciality.data,
         )
         user.set_password(form.password.data)
         session.add(user)
         session.commit()
-        return redirect('/login')
+        return redirect('/works')
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -114,5 +118,5 @@ def main():
 if __name__ == '__main__':
     db_session.global_init("db/blogs.sqlite")
     session = db_session.create_session()
-    print('http://127.0.0.1:5000/works/')
+    print('http://127.0.0.1:5000/register/')
     main()

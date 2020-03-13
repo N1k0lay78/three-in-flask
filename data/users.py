@@ -19,3 +19,10 @@ class User(SqlAlchemyBase):
     address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=True)
     User = orm.relation("Jobs", back_populates='user')
+    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)   
+
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
