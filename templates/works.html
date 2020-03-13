@@ -6,25 +6,25 @@
         <h2>Список работ</h2>
     </div>
     {% for job in jobs %}
-    <div>
+    <div class="text">
         <h2>Работа #{{job.id}}</h2>
         <div class="text">
             <table>
                 <tr>
                     <td>
-                        <a>Title of activity</a>
+                        <a>Работа</a>
                     </td>
                     <td>
-                        <a>Team leader</a>
+                        <a>Руковолитель</a>
                     </td>
                     <td>
-                        <a>Duration</a>
+                        <a>Длительность</a>
                     </td>
                     <td>
-                        <a>List of collaboration</a>
+                        <a>ID работников</a>
                     </td>
                     <td>
-                        <a>is finished</a>
+                        <a>Статус</a>
                     </td>
                 </tr>
                 <tr>
@@ -41,7 +41,14 @@
                         <a>{{job.collaboration}}</a>
                     </td>
                     <td>
-                        <a>{{job.is_finished}}</a>
+                        <a>работа</a>
+                        <br>
+                        {% if job.is_finished %}
+                        <a>закончена</a>
+                        {% else%}
+                        <a>не закончена</a>
+                        {% endif%}
+
                     </td>
                 </tr>
 
