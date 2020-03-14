@@ -18,3 +18,6 @@ class Jobs(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
+    category = orm.relation("Category",
+                              secondary="jobs_to_category",
+                              backref="jobs")

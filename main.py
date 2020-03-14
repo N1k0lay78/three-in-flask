@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, request
 from flask_login import LoginManager, login_manager, login_user, login_required, current_user, logout_user
 from werkzeug.utils import redirect
 
+from data.category import Category
 from data.deportament import Departments
 from data.forms import RegisterForm, LoginForm, JobsForm, DepartmentsForm
 
@@ -86,6 +87,7 @@ def works():
         _job['team_leader'] = f'{leader.name} {leader.surname}'
         _job['duration'] = job.work_size
         _job['collaboration'] = job.collaborators
+        _job['category'] = session.query(Category).filter(Category.news)
         _job['is_finished'] = job.is_finished
         _job['user'] = job.user
         jobs.append(_job)
@@ -105,6 +107,9 @@ def add_job():
             is_finished=form.is_finished.data,
             start_date=datetime.now()
         )
+        categ = Category()
+        categ.name = form.category.data
+        job.category.append(categ)
         session.add(job)
         session.commit()
         return redirect('/works/')
@@ -124,6 +129,7 @@ def edit_jobs(id):
             form.job.data = job.job
             form.work_size.data = job.work_size
             form.collaborators.data = job.collaborators
+            form.category.data = job.category
             form.is_finished.data = job.is_finished
         else:
             abort()
@@ -136,6 +142,9 @@ def edit_jobs(id):
             job.job = form.job.data
             job.work_size = form.work_size.data
             job.collaborators = form.collaborators.data
+            categ = Category()
+            categ.name = form.category.data
+            job.category.append(categ)
             job.is_finished = form.is_finished.data
             session.commit()
             return redirect('/works/')
