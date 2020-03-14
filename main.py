@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Flask, render_template, url_for
 from flask_login import LoginManager, login_manager, login_user
 from werkzeug.utils import redirect
-from data.forms import RegisterForm, LoginForm
+from data.forms import RegisterForm, LoginForm, AddJob
 
 from data import db_session
 from data.jobs import Jobs
@@ -25,7 +25,6 @@ def load_user(user_id):
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
-        print(123)
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
@@ -63,6 +62,26 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/add-job/', methods=['GET', 'POST'])
+def add_job():
+    form = AddJob()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        job = Jobs(
+            team_leader=form.team_leader.data,
+            job=form.job.data,
+            work_size=form.work_size.data,
+            collaborators=form.collaborators.data,
+            is_finished=form.is_finished.data,
+            start_date=datetime.now()
+        )
+        session.add(job)
+        session.commit()
+        return redirect('/works/')
+    return render_template('addjob.html', title='Добавление работы', form=form)
+
 
 
 @app.route('/works/')
@@ -143,4 +162,5 @@ if __name__ == '__main__':
     db_session.global_init("db/blogs.sqlite")
     session = db_session.create_session()
     print('http://127.0.0.1:5000/login/')
+    print('http://127.0.0.1:5000/works/')
     main()

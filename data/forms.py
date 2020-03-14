@@ -17,6 +17,15 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Зарегестрироваться')
 
 
+class AddJob(FlaskForm):
+    team_leader = IntegerField('ID тим лидера', validators=[DataRequired()])
+    job = StringField('Что надо сделать', validators=[DataRequired()])
+    work_size = IntegerField('Длительнотсь', validators=[DataRequired()])
+    collaborators = StringField('ID работников', validators=[DataRequired()])
+    is_finished = BooleanField('Выполнена')
+    submit = SubmitField('Создать')
+
+
 class LoginForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
