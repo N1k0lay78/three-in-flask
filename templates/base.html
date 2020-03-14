@@ -11,10 +11,22 @@
     <title>{{title}}</title>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/works">Наше приложение</a>
-    </nav>
+<header class="bg-light">
+    <div style="overflow: hidden;" class="bg-light">
+        <p style="float: left;">
+            <a class="btn btn-primary" href="/works">Наше приложение</a>
+        </p>
+        {% if current_user.is_authenticated %}
+        <p style="float: right;">
+            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+        </p>
+        {% else %}
+        <p style="float: right;">
+            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+            <a class="btn btn-success" href="/login">Войти</a>
+        </p>
+        {% endif %}
+    </div>
 </header>
 <!-- Begin page content -->
 <main role="main" class="container">

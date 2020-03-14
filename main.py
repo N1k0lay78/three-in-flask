@@ -142,5 +142,5 @@ def main():
 if __name__ == '__main__':
     db_session.global_init("db/blogs.sqlite")
     session = db_session.create_session()
-    print('http://127.0.0.1:5000/register/')
+    print('http://127.0.0.1:5000/login/')
     main()
