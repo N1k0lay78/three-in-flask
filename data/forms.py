@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Зарегестрироваться')
 
 
-class AddJob(FlaskForm):
+class JobsForm(FlaskForm):
     team_leader = IntegerField('ID тим лидера', validators=[DataRequired()])
     job = StringField('Что надо сделать', validators=[DataRequired()])
     work_size = IntegerField('Длительнотсь', validators=[DataRequired()])
