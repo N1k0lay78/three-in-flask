@@ -57,14 +57,14 @@
 
                     </td>
                     <td>
-                        {% if current_user.is_authenticated and (current_user == job.user or current_user.id == 1) %}
+                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1) %}
                         <a href="/jobs/{{ job.id }}" class="btn btn-warning">Изменить</a>
                         {% else %}
                         <a>Вы не можете это редактировать</a>
                         {% endif %}
                     </td>
                     <td>
-                        {% if current_user.is_authenticated and (current_user == job.user or current_user.id == 1) %}
+                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1) %}
                         <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">Удалить</a>
                         {% else %}
                         <a>Вы не можете это удалить</a>

@@ -81,7 +81,7 @@ def add_job():
         session.add(job)
         session.commit()
         return redirect('/works/')
-    return render_template('JobsForm.html', title='Добавление работы', form=form)
+    return render_template('addjob.html', title='Добавление работы', form=form)
 
 
 
@@ -93,6 +93,7 @@ def works():
         _job['id'] = i + 1
         _job['title'] = job.job
         leader = session.query(User).filter(User.id == job.team_leader).first()
+        _job['tl_id'] = leader.id
         _job['team_leader'] = f'{leader.name} {leader.surname}'
         _job['duration'] = job.work_size
         _job['collaboration'] = job.collaborators
