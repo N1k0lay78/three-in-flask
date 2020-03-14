@@ -31,3 +31,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
+
+
+class DepartmentsForm(FlaskForm):
+    title = StringField('Название депортамента', validators=[DataRequired()])
+    chief = IntegerField('ID начальника', validators=[DataRequired()])
+    members = StringField('кто в этом депортаменте', validators=[DataRequired()])
+    email = EmailField('Почта депортамента', validators=[DataRequired()])
+    submit = SubmitField('Создать')

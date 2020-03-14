@@ -19,7 +19,6 @@
         {% if current_user.is_authenticated %}
         <p style="float: right;">
             <a class="btn btn-primary" href="/logout">{{ current_user.name }}</a>
-            <a class="btn btn-secondary" href="/add-job">Добавить работу</a>
         </p>
         {% else %}
         <p style="float: right;">

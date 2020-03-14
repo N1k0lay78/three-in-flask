@@ -5,6 +5,10 @@
     <div>
         <h2>Список работ</h2>
     </div>
+    <div align="left">
+        <a class="btn btn-secondary" href="/departments">К депортаментам</a>
+        <a class="btn btn-secondary" href="/add-job">Добавить работу</a>
+    </div>
     {% for job in jobs %}
     <div class="text">
         <h2>Работа #{{job.id}}</h2>
@@ -57,14 +61,16 @@
 
                     </td>
                     <td>
-                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1) %}
+                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1)
+                        %}
                         <a href="/jobs/{{ job.id }}" class="btn btn-warning">Изменить</a>
                         {% else %}
                         <a>Вы не можете это редактировать</a>
                         {% endif %}
                     </td>
                     <td>
-                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1) %}
+                        {% if current_user.is_authenticated and (current_user.id == job.tl_id or current_user.id == 1)
+                        %}
                         <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">Удалить</a>
                         {% else %}
                         <a>Вы не можете это удалить</a>

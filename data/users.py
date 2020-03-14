@@ -20,7 +20,8 @@ class User(SqlAlchemyBase, UserMixin):
     address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=True)
     User = orm.relation("Jobs", back_populates='user')
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)   
+    User_d = orm.relation("Departments", back_populates='user')
+    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

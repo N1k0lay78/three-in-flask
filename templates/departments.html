@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div align="center">
+    <div>
+        <h2>Список депортаментов</h2>
+    </div>
+    <div class="text">
+        <a class="btn btn-secondary" href="/works">К списку работ</a>
+        <a class="btn btn-secondary" href="/add-depart">Добавить департамент</a>
+    </div>
+    {% for department in departments %}
+    <div class="text">
+        <h2>депортамент #{{department.id}}</h2>
+        <div class="text">
+            <table>
+                <tr>
+                    <td>
+                        <a>Название</a>
+                    </td>
+                    <td>
+                        <a>Руководитель</a>
+                    </td>
+                    <td>
+                        <a>ID работников</a>
+                    </td>
+                    <td>
+                        <a>Почта</a>
+                    </td>
+                    <td>
+                        <a>Редактирование</a>
+                    </td>
+                    <td>
+                        <a>Удаление</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>{{department.title}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.team_leader}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.email}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.collaboration}}</a>
+                    </td>
+                    <td>
+                        {% if current_user.is_authenticated and (current_user.id == department.tl_id or current_user.id
+                        == 1) %}
+                        <a href="/departments/{{ department.id }}" class="btn btn-warning">Изменить</a>
+                        {% else %}
+                        <a>Вы не можете это редактировать</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if current_user.is_authenticated and (current_user.id == department.tl_id or current_user.id
+                        == 1) %}
+                        <a href="/departments_delete/{{ department.id }}" class="btn btn-danger">Удалить</a>
+                        {% else %}
+                        <a>Вы не можете это удалить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</div>

@@ -2,9 +2,11 @@ from datetime import datetime
 from os import abort
 
 from flask import Flask, render_template, url_for, request
-from flask_login import LoginManager, login_manager, login_user, login_required, current_user
+from flask_login import LoginManager, login_manager, login_user, login_required, current_user, logout_user
 from werkzeug.utils import redirect
-from data.forms import RegisterForm, LoginForm, JobsForm
+
+from data.deportament import Departments
+from data.forms import RegisterForm, LoginForm, JobsForm, DepartmentsForm
 
 from data import db_session
 from data.jobs import Jobs
@@ -65,24 +67,11 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route('/add-job/', methods=['GET', 'POST'])
-def add_job():
-    form = JobsForm()
-    if form.validate_on_submit():
-        session = db_session.create_session()
-        job = Jobs(
-            team_leader=form.team_leader.data,
-            job=form.job.data,
-            work_size=form.work_size.data,
-            collaborators=form.collaborators.data,
-            is_finished=form.is_finished.data,
-            start_date=datetime.now()
-        )
-        session.add(job)
-        session.commit()
-        return redirect('/works/')
-    return render_template('addjob.html', title='Добавление работы', form=form)
-
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/works/")
 
 
 @app.route('/works/')
@@ -100,8 +89,26 @@ def works():
         _job['is_finished'] = job.is_finished
         _job['user'] = job.user
         jobs.append(_job)
-    print(jobs)
     return render_template('works.html', jobs=jobs, style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/add-job/', methods=['GET', 'POST'])
+def add_job():
+    form = JobsForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        job = Jobs(
+            team_leader=form.team_leader.data,
+            job=form.job.data,
+            work_size=form.work_size.data,
+            collaborators=form.collaborators.data,
+            is_finished=form.is_finished.data,
+            start_date=datetime.now()
+        )
+        session.add(job)
+        session.commit()
+        return redirect('/works/')
+    return render_template('addjob.html', title='Добавление работы', form=form)
 
 
 @app.route('/jobs/<int:id>', methods=['GET', 'POST'])
@@ -139,16 +146,95 @@ def edit_jobs(id):
 
 @app.route('/jobs_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def news_delete(id):
+def jobs_delete(id):
     session = db_session.create_session()
     job = session.query(Jobs).filter(Jobs.id == id,
-                                      (Jobs.user == current_user) | (current_user.id == 1)).first()
+                                     (Jobs.user == current_user) | (current_user.id == 1)).first()
     if job:
         session.delete(job)
         session.commit()
     else:
-        abort(404)
+        abort()
     return redirect('/works/')
+
+
+@app.route('/departments/')
+def _departments():
+    departments = []
+    for i, depart in enumerate(session.query(Departments).all()):
+        _deprat = {}
+        _deprat["id"] = i + 1
+        _deprat["title"] = depart.title
+        tl = session.query(User).filter(User.id == depart.chief).first()
+        _deprat["team_leader"] = f"{tl.name} {tl.surname}"
+        _deprat["email"] = depart.email
+        _deprat["collaboration"] = depart.members
+        _deprat["tl_id"] = tl.id
+        departments.append(_deprat)
+    return render_template('departments.html', departments=departments,
+                           style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/add-depart/', methods=['GET', 'POST'])
+def add_depart():
+    form = DepartmentsForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        depart = Departments(
+            title=form.title.data,
+            chief=form.chief.data,
+            members=form.members.data,
+            email=form.email.data
+        )
+        session.add(depart)
+        session.commit()
+        return redirect('/departments/')
+    return render_template('action-depart.html', title='Добавление департмаент', form=form)
+
+
+@app.route('/departments/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_depart(id):
+    form = DepartmentsForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        depart = session.query(Departments).filter(Departments.id == id,
+                                                   (Departments.user == current_user) | (current_user.id == 1)).first()
+        if depart:
+            form.title.data = depart.title
+            form.chief.data = depart.chief
+            form.members.data = depart.members
+            form.email.data = depart.email
+        else:
+            abort()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        depart = session.query(Departments).filter(Departments.id == id,
+                                                   (Departments.user == current_user) | (current_user.id == 1)).first()
+        if depart:
+            depart.title = form.title.data
+            depart.chief = form.chief.data
+            depart.members = form.members.data
+            depart.email = form.email.data
+            session.commit()
+            return redirect('/departments/')
+        else:
+            abort()
+    return render_template('action-depart.html', title='Редактирование департамента', form=form)
+
+
+@app.route('/departments_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def departs_delete(id):
+    session = db_session.create_session()
+    depart = session.query(Departments).filter(Departments.id == id,
+                                               (Departments.user == current_user) | (current_user.id == 1)).first()
+    if depart:
+        session.delete(depart)
+        session.commit()
+    else:
+        abort()
+    return redirect('/departments/')
 
 
 def main():
@@ -214,4 +300,5 @@ if __name__ == '__main__':
     print('http://127.0.0.1:5000/login/')
     print('http://127.0.0.1:5000/works/')
     print('http://127.0.0.1:5000/jobs/1')
+    print('http://127.0.0.1:5000/departments/')
     main()
