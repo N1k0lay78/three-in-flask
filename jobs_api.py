@@ -40,7 +40,7 @@ def get_one_jobs(job_id):
 
 
 @blueprint.route('/api/jobs', methods=['POST'])
-def create_news():
+def create_jobs():
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in
@@ -60,5 +60,16 @@ def create_news():
         start_date=datetime.now()
     )
     session.add(job)
+    session.commit()
+    return jsonify({'success': 'OK'})
+
+
+@blueprint.route('/api/jobs/<int:jobs_id>', methods=['DELETE'])
+def delete_jobs(jobs_id):
+    session = db_session.create_session()
+    jobs = session.query(Jobs).get(jobs_id)
+    if not jobs:
+        return jsonify({'error': 'Not found'})
+    session.delete(jobs)
     session.commit()
     return jsonify({'success': 'OK'})
