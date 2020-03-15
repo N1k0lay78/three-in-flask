@@ -1,5 +1,7 @@
+from datetime import datetime
+
 import flask
-from flask import jsonify
+from flask import jsonify, request
 
 from data import db_session
 from data.jobs import Jobs
@@ -16,8 +18,7 @@ def get_jobs():
         {
             'jobs':
                 [job.to_dict(only=(
-                    'id', 'team_leader', 'job', 'work_size', 'collaborators', 'start_date', 'end_date', 'is_finished',
-                    'user.name'))
+                    'id', 'team_leader', 'job', 'work_size', 'collaborators', 'start_date', 'end_date', 'is_finished'))
                     for job in jobs]
         }
     )
@@ -32,8 +33,32 @@ def get_one_jobs(job_id):
     return jsonify(
         {
             'jobs': job.to_dict(only=(
-                'id', 'team_leader', 'job', 'work_size', 'collaborators', 'start_date', 'end_date', 'is_finished',
-                'user.name'))
+                'id', 'team_leader', 'job', 'work_size', 'collaborators', 'start_date', 'end_date', 'is_finished'))
 
         }
     )
+
+
+@blueprint.route('/api/jobs', methods=['POST'])
+def create_news():
+    if not request.json:
+        return jsonify({'error': 'Empty request'})
+    elif not all(key in request.json for key in
+                 ['id', 'team_leader', 'job', 'work_size', 'collaborators', 'is_finished']):
+        return jsonify({'error': 'Bad request'})
+    session = db_session.create_session()
+    job = session.query(Jobs).get(request.json['id'])
+    if job:
+        return jsonify({'error': 'Id already exists'})
+    job = Jobs(
+        id=request.json['id'],
+        team_leader=request.json['team_leader'],
+        job=request.json['job'],
+        work_size=request.json['work_size'],
+        collaborators=request.json['collaborators'],
+        is_finished=request.json['is_finished'],
+        start_date=datetime.now()
+    )
+    session.add(job)
+    session.commit()
+    return jsonify({'success': 'OK'})
