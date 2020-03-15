@@ -86,10 +86,10 @@ def put_jobs(jobs_id):
     if request.json.get('job'):
         jobs.job = request.json.get('job')
     if request.json.get('work_size'):
-        jobs.any = request.json.get('work_size')
+        jobs.work_size = request.json.get('work_size')
     if request.json.get('collaborators'):
-        jobs.any = request.json.get('collaborators')
+        jobs.collaborators = request.json.get('collaborators')
     if request.json.get('is_finished'):
-        jobs.any = request.json.get('is_finished')
+        jobs.is_finished = request.json.get('is_finished')
     session.commit()
     return jsonify({'success': 'OK'})
