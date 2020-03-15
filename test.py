@@ -1,8 +1,9 @@
-from requests import get, post, delete
+from requests import get, post, delete, put
 
 test_get = False
 test_post = False
-test_delete = True
+test_delete = False
+test_put = True
 
 if test_get:
     print(print(get('http://localhost:5000/api/jobs/').json()))
@@ -31,7 +32,7 @@ if test_post:
                      'work_size': 1,
                      'collaborators': "все",
                      'is_finished': True,
-                     'id': int(input('Не используемый ID: '))}).json())
+                     'id': 10}).json())
     print(get('http://localhost:5000/api/jobs/').json())
 
 if test_delete:
@@ -39,4 +40,12 @@ if test_delete:
     print(delete('http://localhost:5000/api/jobs/999').json())
     print('Успешно удалена')
     print(delete('http://localhost:5000/api/jobs/1').json())
+    print(get('http://localhost:5000/api/jobs/').json())
+
+if test_put:
+    print('нет в базе')
+    print(put('http://localhost:5000/api/jobs/999').json())
+    print('Успешно изменена')
+    print(put('http://localhost:5000/api/jobs/10',
+               json={'job': 'нет загаловка',}).json())
     print(get('http://localhost:5000/api/jobs/').json())
