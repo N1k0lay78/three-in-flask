@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, request
 from flask_login import LoginManager, login_manager, login_user, login_required, current_user, logout_user
 from werkzeug.utils import redirect
 
+import jobs_api
 from data.category import Category
 from data.deportament import Departments
 from data.forms import RegisterForm, LoginForm, JobsForm, DepartmentsForm
@@ -87,7 +88,7 @@ def works():
         _job['team_leader'] = f'{leader.name} {leader.surname}'
         _job['duration'] = job.work_size
         _job['collaboration'] = job.collaborators
-        _job['category'] = session.query(Category).filter(Category.news)
+        _job['category'] = session.query(Category).filter(Category.jobs)
         _job['is_finished'] = job.is_finished
         _job['user'] = job.user
         jobs.append(_job)
@@ -247,59 +248,7 @@ def departs_delete(id):
 
 
 def main():
-    # флаг для задач
-    zadacha_1 = False
-    zadacha_2 = False
-    if zadacha_1:
-        user = User()
-        user.surname = 'Scott'
-        user.name = 'Ridley'
-        user.age = 21
-        user.position = 'captain'
-        user.speciality = 'research engineer'
-        user.address = 'module_1'
-        user.email = 'scott_chief@mars.org'
-        session.add(user)
-        session.commit()
-        user = User()
-        user.surname = 'Nikniksham'
-        user.name = 'Nikniksham'
-        user.age = 21
-        user.position = 'captain'
-        user.speciality = 'engineer'
-        user.address = 'module_10'
-        user.email = 'nikniksham@mars.org'
-        session.add(user)
-        session.commit()
-        user = User()
-        user.surname = 'Builder'
-        user.name = 'Bob'
-        user.age = 21
-        user.position = 'Worker'
-        user.speciality = 'Builder'
-        user.address = 'module_1'
-        user.email = 'Bob@mars.org'
-        session.add(user)
-        session.commit()
-        user = User()
-        user.surname = 'Builder'
-        user.name = 'Bot'
-        user.age = 21
-        user.position = 'gost'
-        user.speciality = 'Builder'
-        user.address = 'module_1'
-        user.email = 'Bot@mars.org'
-        session.add(user)
-        session.commit()
-    if zadacha_2:
-        jobs = Jobs()
-        jobs.team_leader = 1
-        jobs.job = 'deployment of residential modules 1 and 2'
-        jobs.work_size = 15
-        jobs.collaborators = '2, 3'
-        jobs.start_date = datetime.now()
-        session.add(jobs)
-        session.commit()
+    app.register_blueprint(jobs_api.blueprint)
     app.run()
 
 
@@ -309,5 +258,6 @@ if __name__ == '__main__':
     print('http://127.0.0.1:5000/login/')
     print('http://127.0.0.1:5000/works/')
     print('http://127.0.0.1:5000/jobs/1')
+    print('http://127.0.0.1:5000/api/jobs/')
     print('http://127.0.0.1:5000/departments/')
     main()
