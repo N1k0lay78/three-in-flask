@@ -1,7 +1,7 @@
 from datetime import datetime
 from os import abort
 
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, make_response, jsonify
 from flask_login import LoginManager, login_manager, login_user, login_required, current_user, logout_user
 from werkzeug.utils import redirect
 
@@ -18,6 +18,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @login_manager.user_loader
