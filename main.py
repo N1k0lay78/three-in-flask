@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_manager, login_user, login_required,
 from werkzeug.utils import redirect
 
 import jobs_api
+import users_api
 from data.category import Category
 from data.deportament import Departments
 from data.forms import RegisterForm, LoginForm, JobsForm, DepartmentsForm
@@ -254,6 +255,7 @@ def departs_delete(id):
 
 def main():
     app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
     app.run()
 
 
