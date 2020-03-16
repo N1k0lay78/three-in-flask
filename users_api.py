@@ -31,11 +31,8 @@ def get_one_users(user_id):
     if not user:
         return jsonify({'error': 'Not found'})
     return jsonify(
-        {
-            'users': user.to_dict(only=(
-                'id', 'surname', 'name', 'age', 'position', 'speciality', 'address', 'email'))
-
-        }
+        user.to_dict(only=(
+            'id', 'surname', 'name', 'age', 'position', 'speciality', 'address', 'email'))
     )
 
 

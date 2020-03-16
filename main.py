@@ -3,10 +3,12 @@ from os import abort
 
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from flask_login import LoginManager, login_manager, login_user, login_required, current_user, logout_user
+from requests import get
 from werkzeug.utils import redirect
 
 import jobs_api
 import users_api
+from Yandex_map import get_sity
 from data.category import Category
 from data.deportament import Departments
 from data.forms import RegisterForm, LoginForm, JobsForm, DepartmentsForm
@@ -51,7 +53,8 @@ def reqister():
             surname=form.surname.data,
             age=form.age.data,
             position=form.position.data,
-            speciality=form.speciality.data
+            speciality=form.speciality.data,
+            address=form.address.data
         )
         user.set_password(form.password.data)
         session.add(user)
@@ -253,6 +256,17 @@ def departs_delete(id):
     return redirect('/departments/')
 
 
+@app.route('/users_show/<int:user_id>')
+def user(user_id):
+    req = get(f"http://127.0.0.1:5000/api/users/{user_id}").json()
+    if req.get('error'):
+        return req.get('error')
+    print(req)
+    img = get_sity(req["address"])
+    print(2, img)
+    return render_template('user.html', title='Родной город', user=req, file=img)
+
+
 def main():
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
@@ -267,4 +281,5 @@ if __name__ == '__main__':
     print('http://127.0.0.1:5000/jobs/1')
     print('http://127.0.0.1:5000/api/jobs/')
     print('http://127.0.0.1:5000/departments/')
+    print('http://127.0.0.1:5000/users_show/1')
     main()
