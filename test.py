@@ -1,4 +1,6 @@
 from requests import get, post, delete, put
+from flask import Flask
+
 
 test = False
 if test:
@@ -53,11 +55,7 @@ if test:
         print(get('http://localhost:5000/api/jobs/').json())
 
 
-from flask import Flask
-from flask_ngrok import run_with_ngrok
-
 app = Flask(__name__)
-run_with_ngrok(app)
 
 
 @app.route("/")
