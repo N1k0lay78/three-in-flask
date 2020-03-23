@@ -28,6 +28,11 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
+@app.route("/")
+def move():
+    return redirect('/register/')
+
+
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
